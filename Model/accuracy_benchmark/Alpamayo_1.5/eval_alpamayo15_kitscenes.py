@@ -334,7 +334,7 @@ def main() -> int:
             return 0
 
     gts = load_ground_truths(scenes, index, args.mirror_gt, args.data_dir)
-    gt = gts[0]
+    # gt = gts[0]
     preds = {uid: np.asarray(r["pred_xy"], dtype=np.float64) for uid, r in done.items()}
     max_k = max((len(p) for p in preds.values()), default=0)
     if args.report_only and 0 < max_k < args.best_of:     # e.g. a folder run with --num-samples 1
