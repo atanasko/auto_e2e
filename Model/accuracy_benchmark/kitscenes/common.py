@@ -85,7 +85,7 @@ def load_index(path: Path) -> List[str]:
         if "sample_uid" in first.split(","):
             items = [r["sample_uid"] for r in csv.DictReader(raw.splitlines())]
         else:
-            items = [l for l in raw.splitlines() if l.strip() and not l.startswith("#")]
+            items = [line for line in raw.splitlines() if line.strip() and not line.startswith("#")]
     uids, bad = [], []
     for item in items:
         uid = normalize_uid(item)

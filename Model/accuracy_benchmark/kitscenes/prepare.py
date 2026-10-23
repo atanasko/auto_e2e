@@ -55,7 +55,7 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 from scipy.spatial.transform import Rotation, Slerp
@@ -256,9 +256,9 @@ def build_record(scene_id: str, t0: int, poses: ScenePoses, r_fix: np.ndarray, s
     # so the prompt equals DrivingScene.instruction() for this record.
     content.append({"text": qwen_instruction(np.asarray(r5(hist), dtype=np.float32), nav)})
 
-    alp_cams = {}
+    alp_cams: Dict[str, Dict[str, Any]] = {}
     for slot, cam in ALPAMAYO_CAMERAS.items():
-        entry = {"camera": cam,
+        entry: Dict[str, Any] = {"camera": cam,
                  "images": [f"{scene_rel}/{cam}/{max(t0 + off, 0):010d}.jpg" for off in ALPAMAYO_FRAME_OFFSETS]}
         if slot == ALPAMAYO_TELE_SLOT:
             entry["crop"] = tele_crop
@@ -410,7 +410,10 @@ def main() -> int:
     scenes_path = args.out_dir / f"kitscenes_{args.split}_e2e.jsonl"
     index_path = args.out_dir / f"kitscenes_{args.split}_eval_index.csv"
     image_root: Optional[Path] = None
-    written, missing_images, short_future, nav_counts = 0, [], 0, Counter()
+    written = 0
+    short_future = 0
+    missing_images: List[str] = []
+    nav_counts: Counter[str] = Counter()
     index_rows = []
     with open(scenes_path, "w") as out:
         for n, sid in enumerate(sorted(population), 1):

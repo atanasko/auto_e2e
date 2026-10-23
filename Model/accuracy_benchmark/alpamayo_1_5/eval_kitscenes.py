@@ -124,7 +124,7 @@ def load_image(path: Path, crop: Optional[dict] = None):
     img = _crop(Image.open(path).convert("RGB"), crop)
     th, tw = IMG_HW
     s = max(tw / img.width, th / img.height)
-    img = img.resize((round(img.width * s), round(img.height * s)), Image.BICUBIC)
+    img = img.resize((round(img.width * s), round(img.height * s)), Image.Resampling.BICUBIC)
     left, top = (img.width - tw) // 2, (img.height - th) // 2
     img = img.crop((left, top, left + tw, top + th))
     return t.from_numpy(np.asarray(img).copy()).permute(2, 0, 1)
@@ -268,6 +268,7 @@ def main() -> int:
             sys.exit("pass --image-root (or --data-dir with prepare_manifest.json)")
 
     if args.check_frames:
+        assert image_root is not None
         bad = [(uid, p) for uid, r in recs.items() for p in image_paths(r, image_root, args.no_tele)
                if not p.exists()]
         log(f"{len(recs) - len({u for u, _ in bad}):,}/{len(recs):,} samples have all images")
@@ -305,6 +306,7 @@ def main() -> int:
             f"{len(mine) - len([u for u in mine if u not in done]):,} done, {len(todo):,} to run")
         if todo:
             import time
+            assert image_root is not None
             model, processor = load_model(args.attn)
             name = "preds.jsonl" if args.num_shards == 1 else f"preds.shard{args.shard_index}-of-{args.num_shards}.jsonl"
             fallbacks, t_start = 0, time.time()
