@@ -46,8 +46,8 @@ from typing import Dict, List, Optional
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from kitscenes_e2e_common import (  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from accuracy_benchmark.kitscenes.common import (  # noqa: E402
     DEFAULT_BEST_OF, add_mirror_arg, evaluate, load_ground_truths, load_index, normalize_uid,
     resolve_data,
 )

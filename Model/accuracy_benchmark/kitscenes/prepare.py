@@ -61,7 +61,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation, Slerp
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from kitscenes_e2e_common import (  # noqa: E402
+from common import (  # noqa: E402
     EXPECTED_SAMPLES, EXPECTED_SCENES, FUTURE_STEPS, HISTORY_STEPS, HZ, make_uid, sha256_file,
 )
 
